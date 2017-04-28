@@ -10,6 +10,46 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<style>
+			html,body{
+				height: 100%;
+			}
+			.container{
+				width: 1025px;
+			}
+			.vertical-center{
+				height: 100%;
+				width: 100%;
+
+				text-align: center; /*on centre les éléments horizontalement */
+				font:0/0 a; /*on supprime l'espace des éléments inline(-block) */
+				margin-bottom: 0;
+			}
+			.vertical-center:before{ /* on crée un pseudo-élément qui utilise toute la hauteur */
+				content: ' ';
+				display: inline-block;
+				vertical-align: middle;/* on centre verticalement l'élément inline */
+				height: 100%;
+			}
+			.vertical-center > .container{
+				max-width: 100%;
+				background-color: gold;
+				border-radius: 10px;
+
+				display: inline-block;
+				vertical-align: middle;
+				font:16px/1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+			}
+			#resultat{
+				margin: 20px;
+				-webkit-transition: all 0.3s linear;
+				-moz-transition: all 0.3s linear;
+				-ms-transition: all 0.3s linear;
+				-o-transition: all 0.3s linear;
+				transition: all 0.3s linear;
+				transform: translateX(200px);
+				opacity: 0;
+			}
+
 		</style>
 	</head>
 	<body>
