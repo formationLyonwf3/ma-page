@@ -1,34 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Ma Page</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<style>
+			html,body{
+				height: 100%;
+			}
+			.container{
+				width: 1025px;
+			}
+			.vertical-center{
+				height: 100%;
+				width: 100%;
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</head>
-<body>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				text-align: center; /*on centre les éléments horizontalement */
+				font:0/0 a; /*on supprime l'espace des éléments inline(-block) */
+				margin-bottom: 0;
+			}
+			.vertical-center:before{ /* on crée un pseudo-élément qui utilise toute la hauteur */
+				content: ' ';
+				display: inline-block;
+				vertical-align: middle;/* on centre verticalement l'élément inline */
+				height: 100%;
+			}
+			.vertical-center > .container{
+				max-width: 100%;
+				background-color: gold;
+				border-radius: 10px;
 
+				display: inline-block;
+				vertical-align: middle;
+				font:16px/1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+			}
+			#resultat{
+				margin: 20px;
+				-webkit-transition: all 0.3s linear;
+				-moz-transition: all 0.3s linear;
+				-ms-transition: all 0.3s linear;
+				-o-transition: all 0.3s linear;
+				transition: all 0.3s linear;
+				transform: translateX(200px);
+				opacity: 0;
+			}
 
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-</body>
+		</style>
+	</head>
+	<body>
+		<div class="jumbotron vertical-center">
+			<div class="container text-center">
+				<h1 id="app-titre">Entrer le titre du film</h1>
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4">
+						<div class="bg-danger"><p id="erreur"></p></div>
+						<form>
+							<div class="form-group">
+								<input type="text" name="titre" id="titre" class="form-control">
+							</div>
+							<div class="form-group">
+								<button id="rechercher" class="btn btn-info btn-lg">Rechercher</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-12">
+						<div id="resultat">
+							<h2 id="titre-film"></h2>
+							<div id="date"></div>
+							<img id="image-film" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		$('#rechercher').click(function(e){
+			e.preventDefault();
+			var url = 'http://www.omdbapi.com/';
+			
+			$.ajax({
+				type: 'GET',
+				url: url,
+				data: {t: $('#titre').val(), r: 'json'},
+				dataType: 'json',
+				beforeSend: function(){
+					$('#resultat').attr('style', 'opacity:0; transform: translateX(200px);');
+				},
+				success: function(reponse){
+					if(reponse.Response == 'True'){
+						console.log(reponse);
+						$('#titre-film').html(reponse.Title);
+						$('#date').html('<i>Date de sortie:</i><h3>'+reponse.Released+'</h3>');
+						$('#image-film').attr('src', reponse.Poster);
+						$('#erreur').html('');
+						setTimeout(function(){
+							$('#resultat').attr('style', 'opacity:1; transform: translateX(0);');
+						}, 500);
+					}else{
+						$('#erreur').html("Désolé, nous n'avons pas trouvé ce film.");
+					}
+				},
+				error: function(reponse){
+					$('#erreur').html("Probleme de connexion.");
+				},
+				complete: function(data){
+					console.log(data);
+				}
+			});
+		});
+	});
+	</script>
+	</body>
 </html>
